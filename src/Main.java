@@ -32,15 +32,20 @@ public class Main {
         File targetFolder = new File(TARGET_FOLDER_PATH);
         createDirectoryIfMissing(targetFolder);
 
+        int movedFiles = 0;
+
         for (File file : files) {
             try {
                 Path newPath = new File(targetFolder, file.getName()).toPath();
                 Files.move(file.toPath(), newPath, StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("Moved " + file.getName() + " to " + TARGET_FOLDER_PATH);
+                System.out.printf("Moved %s to %s%n", file.getName(), TARGET_FOLDER_PATH);
+                movedFiles++;
             } catch (IOException ioException) {
-                System.out.println("Could not move " + file.getName() + ": " + ioException.getMessage());
+                System.out.printf("Could not move %s: %s%n", file.getName(), ioException.getMessage());
             }
         }
+
+        System.out.printf("Moved %d out of %d files.%n", movedFiles, files.length);
     }
 
     private static void createDirectoryIfMissing(File firstSubfolder) {
