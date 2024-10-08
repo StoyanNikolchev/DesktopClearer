@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -37,6 +38,14 @@ public class Main {
         for (File file : files) {
             try {
                 Path newPath = new File(targetFolder, file.getName()).toPath();
+
+                //Asks for confirmation to overwrite if the file already exists
+                if (Files.exists(newPath)) {
+                    if (!confirmOverwrite(file)) {
+                     continue;
+                    }
+                }
+
                 Files.move(file.toPath(), newPath, StandardCopyOption.REPLACE_EXISTING);
                 System.out.printf("Moved %s to %s%n", file.getName(), TARGET_FOLDER_PATH);
                 movedFiles++;
@@ -60,5 +69,20 @@ public class Main {
                 .toList();
 
         return desktopFolder.listFiles(file -> file.isFile() && !blacklist.contains(file.getName()));
+    }
+
+    private static boolean confirmOverwrite(File file) {
+        System.out.println("File " + file.getName() + " already exists in target folder. Overwrite? (yes/no)");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+
+        if (input.equalsIgnoreCase("yes")) {
+            return true;
+        } else if (input.equalsIgnoreCase("no")) {
+            return false;
+        }
+
+        System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+        return confirmOverwrite(file);
     }
 }
