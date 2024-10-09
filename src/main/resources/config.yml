@@ -1,0 +1,13 @@
+desktopPath: "C:\\Users\\nikol\\Desktop"
+
+#The application will create a subfolder named after the current date
+destinationPath: "C:\\Users\\nikol\\Desktop\\Stuff"
+
+blacklist:
+  - desktop.ini
+  - Stoyan_Nikolchev_Resume.pdf
+  - warranty_912766681016608146-1.pdf
+  - 66bb71073a04d.pdf
+  - notes.txt
+  - когато ландкорът беше млад.txt
+  - workout.pdf
