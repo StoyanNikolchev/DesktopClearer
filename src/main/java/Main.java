@@ -12,7 +12,11 @@ public class Main {
     public static final String CURRENT_DATE = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
     public static void main(String[] args) {
-        Config config = Config.loadConfig("config.yml");
+        String jarDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+                .getParent();
+        String externalConfigFilePath = jarDir + File.separator + "config.yml";
+
+        Config config = Config.loadConfig(externalConfigFilePath);
         if (config == null) {
             System.out.println("Failed to load configuration.");
             return;
@@ -29,7 +33,7 @@ public class Main {
             destinationPath = desktopPath;
         }
 
-        String destinationPathDated = destinationPath + "\\" + CURRENT_DATE;
+        destinationPath = destinationPath + File.separator + CURRENT_DATE;
 
         List<String> blacklist = config.getBlacklist();
 

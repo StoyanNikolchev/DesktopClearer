@@ -1,5 +1,7 @@
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -32,13 +34,34 @@ public class Config {
         this.blacklist = blacklist;
     }
 
-    public static Config loadConfig(String filePath) {
+    public static Config loadConfig(String externalConfigFilePath) {
         Yaml yaml = new Yaml();
-        try (InputStream inputStream = Config.class.getClassLoader().getResourceAsStream(filePath)) {
-            return yaml.loadAs(inputStream, Config.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+
+        //Loads an external config.yml if it exists
+        File externalConfigFile = new File(externalConfigFilePath);
+
+        if (externalConfigFile.exists()) {
+            try (InputStream inputStream = new FileInputStream(externalConfigFile)) {
+                System.out.println("Loaded external config from " + externalConfigFilePath);
+                return yaml.loadAs(inputStream, Config.class);
+
+            } catch (Exception e) {
+                System.out.println("Error loading external config: " + e.getMessage());
+            }
         }
+
+        //Defaults to the internal config.yml
+        try (InputStream inputStream = Config.class.getClassLoader().getResourceAsStream("config.yml")) {
+            if (inputStream != null) {
+                System.out.println("Loaded default config.");
+                return yaml.loadAs(inputStream, Config.class);
+            } else {
+                System.out.println("Internal config not found in JAR.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading internal config: " + e.getMessage());
+        }
+
+        return null;
     }
 }
