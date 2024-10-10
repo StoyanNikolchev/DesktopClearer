@@ -19,7 +19,18 @@ public class Main {
         }
 
         String desktopPath = config.getDesktopPath();
-        String destinationPath = config.getDestinationPath() + "\\" + CURRENT_DATE;
+        if (desktopPath == null) {
+            desktopPath = Utils.getDefaultDesktopPath();
+        }
+
+        //Defaults a null destination path to the desktop
+        String destinationPath = config.getDestinationPath();
+        if (destinationPath == null) {
+            destinationPath = desktopPath;
+        }
+
+        String destinationPathDated = destinationPath + "\\" + CURRENT_DATE;
+
         List<String> blacklist = config.getBlacklist();
 
         File desktopFolder = new File(desktopPath);

@@ -1,13 +1,11 @@
-desktopPath: "C:\\Users\\nikol\\Desktop"
+#Example: "C:\\Users\\YourUsername\\Desktop"
+#Defaults to the Windows desktop directory if left blank
+desktopPath:
 
 #The application will create a subfolder named after the current date
-destinationPath: "C:\\Users\\nikol\\Desktop\\Stuff"
+#Defaults to the set desktop directory if left blank
+destinationPath:
 
+#Add the full names of the files you don't want the app to touch.
 blacklist:
-  - desktop.ini
-  - Stoyan_Nikolchev_Resume.pdf
-  - warranty_912766681016608146-1.pdf
-  - 66bb71073a04d.pdf
-  - notes.txt
-  - когато ландкорът беше млад.txt
-  - workout.pdf
+  - desktop.ini #Do not delete
