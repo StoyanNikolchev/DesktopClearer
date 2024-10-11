@@ -10,5 +10,5 @@ destinationPath:
 blacklistedFiles:
   - desktop.ini #Do not delete
 
-#Example: .exe
+#Example: exe
 blacklistedExtensions:

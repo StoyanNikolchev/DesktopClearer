@@ -10,18 +10,21 @@ import java.util.Scanner;
 
 public class Main {
     public static final String CURRENT_DATE = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    public static Config config;
 
     public static void main(String[] args) {
         String jarDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
                 .getParent();
         String externalConfigFilePath = jarDir + File.separator + "config.yml";
 
-        Config config = Config.loadConfig(externalConfigFilePath);
+        config = Config.loadConfig(externalConfigFilePath);
+
         if (config == null) {
             System.out.println("Failed to load configuration.");
             return;
         }
 
+        //Defaults a null desktop path to the default Windows desktop path
         String desktopPath = config.getDesktopPath();
         if (desktopPath == null) {
             desktopPath = Utils.getDefaultDesktopPath();
@@ -32,21 +35,11 @@ public class Main {
         if (destinationPath == null) {
             destinationPath = desktopPath;
         }
-
         destinationPath = destinationPath + File.separator + CURRENT_DATE;
 
         File desktopFolder = new File(desktopPath);
 
-        List<String> blacklistedFiles = config.getBlacklistedFiles();
-        List<String> blacklistedExtensions = config.getBlacklistedExtensions();
-
-        File[] files;
-
-        if (blacklistedExtensions == null) {
-            files = getNonBlacklistedFiles(desktopFolder, blacklistedFiles);
-        } else {
-            files = getNonBlacklistedFiles(desktopFolder, blacklistedFiles, blacklistedExtensions);
-        }
+        File[] files = Utils.getNonBlacklistedFiles(desktopFolder, config);
 
         //Stops the program if there are no eligible files
         if (files == null || files.length == 0) {
@@ -85,27 +78,6 @@ public class Main {
         if (!firstSubfolder.exists()) {
             firstSubfolder.mkdirs();
         }
-    }
-
-    private static File[] getNonBlacklistedFiles(File desktopFolder, List<String> blacklistedFiles, List<String> blacklistedExtensions) {
-        return desktopFolder.listFiles(file -> {
-            String fileName = file.getName();
-
-            if (file.isFile() && !blacklistedFiles.contains(fileName)) {
-
-                for (String blacklistedExtension : blacklistedExtensions) {
-                    if (fileName.endsWith(blacklistedExtension)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            return false;
-        });
-    }
-
-    private static File[] getNonBlacklistedFiles(File desktopFolder, List<String> blacklistedFiles) {
-        return desktopFolder.listFiles(file -> file.isFile() && !blacklistedFiles.contains(file.getName()));
     }
 
     private static boolean confirmOverwrite(File file) {

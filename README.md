@@ -47,7 +47,7 @@ After building the JAR, you need to create a `config.yml` file that defines the 
     blacklistedFiles:
       - desktop.ini #Do not delete
 	  
-    #Example: .exe
+    #Example: exe
     blacklistedExtensions:
     ```
 
