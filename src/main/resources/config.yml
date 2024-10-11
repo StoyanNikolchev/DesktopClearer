@@ -7,5 +7,9 @@ desktopPath:
 destinationPath:
 
 #Add the full names of the files you don't want the app to touch.
-blacklist:
+blacklistedFiles:
   - desktop.ini #Do not delete
+
+#Example: .exe
+blacklistedExtensions:
+  -

@@ -35,11 +35,18 @@ public class Main {
 
         destinationPath = destinationPath + File.separator + CURRENT_DATE;
 
-        List<String> blacklist = config.getBlacklist();
-
         File desktopFolder = new File(desktopPath);
 
-        File[] files = getNonBlacklistedFiles(desktopFolder, blacklist);
+        List<String> blacklistedFiles = config.getBlacklistedFiles();
+        List<String> blacklistedExtensions = config.getBlacklistedExtensions();
+
+        File[] files;
+
+        if (blacklistedExtensions == null) {
+            files = getNonBlacklistedFiles(desktopFolder, blacklistedFiles);
+        } else {
+            files = getNonBlacklistedFiles(desktopFolder, blacklistedFiles, blacklistedExtensions);
+        }
 
         //Stops the program if there are no eligible files
         if (files == null || files.length == 0) {
@@ -59,7 +66,7 @@ public class Main {
                 //Asks for confirmation to overwrite if the file already exists
                 if (Files.exists(newPath)) {
                     if (!confirmOverwrite(file)) {
-                     continue;
+                        continue;
                     }
                 }
 
@@ -80,8 +87,25 @@ public class Main {
         }
     }
 
-    private static File[] getNonBlacklistedFiles(File desktopFolder, List<String> blacklist) {
-        return desktopFolder.listFiles(file -> file.isFile() && !blacklist.contains(file.getName()));
+    private static File[] getNonBlacklistedFiles(File desktopFolder, List<String> blacklistedFiles, List<String> blacklistedExtensions) {
+        return desktopFolder.listFiles(file -> {
+            String fileName = file.getName();
+
+            if (file.isFile() && !blacklistedFiles.contains(fileName)) {
+
+                for (String blacklistedExtension : blacklistedExtensions) {
+                    if (fileName.endsWith(blacklistedExtension)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private static File[] getNonBlacklistedFiles(File desktopFolder, List<String> blacklistedFiles) {
+        return desktopFolder.listFiles(file -> file.isFile() && !blacklistedFiles.contains(file.getName()));
     }
 
     private static boolean confirmOverwrite(File file) {

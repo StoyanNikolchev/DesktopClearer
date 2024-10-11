@@ -8,7 +8,8 @@ import java.util.List;
 public class Config {
     private String desktopPath;
     private String destinationPath;
-    private List<String> blacklist;
+    private List<String> blacklistedFiles;
+    private List<String> blacklistedExtensions;
 
     public String getDesktopPath() {
         return desktopPath;
@@ -18,8 +19,12 @@ public class Config {
         return destinationPath;
     }
 
-    public List<String> getBlacklist() {
-        return blacklist;
+    public List<String> getBlacklistedFiles() {
+        return blacklistedFiles;
+    }
+
+    public List<String> getBlacklistedExtensions() {
+        return blacklistedExtensions;
     }
 
     public void setDesktopPath(String desktopPath) {
@@ -30,8 +35,12 @@ public class Config {
         this.destinationPath = destinationPath;
     }
 
-    public void setBlacklist(List<String> blacklist) {
-        this.blacklist = blacklist;
+    public void setBlacklistedFiles(List<String> blacklistedFiles) {
+        this.blacklistedFiles = blacklistedFiles;
+    }
+
+    public void setBlacklistedExtensions(List<String> blacklistedExtensions) {
+        this.blacklistedExtensions = blacklistedExtensions;
     }
 
     public static Config loadConfig(String externalConfigFilePath) {
