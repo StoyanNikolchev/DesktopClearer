@@ -8,7 +8,9 @@ public class Utils {
         return System.getProperty("user.home") + File.separator + "Desktop";
     }
 
-    public static File[] getNonBlacklistedFiles(File desktopFolder, Config config) {
+    public static File[] getNonBlacklistedFiles(File desktopFolder) {
+        Config config = Config.getInstance();
+
         List<String> blacklistedFiles = config.getBlacklistedFiles();
         List<String> blacklistedExtensions = config.getBlacklistedExtensions();
 

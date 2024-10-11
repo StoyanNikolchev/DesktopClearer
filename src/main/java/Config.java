@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.List;
 
 public class Config {
+    private static Config instance;
     private String desktopPath;
     private String destinationPath;
     private List<String> blacklistedFiles;
@@ -43,17 +44,29 @@ public class Config {
         this.blacklistedExtensions = blacklistedExtensions;
     }
 
-    public static Config loadConfig(String externalConfigFilePath) {
+    public static Config getInstance() {
+        if (instance == null) {
+            instance = new Config();
+            loadConfig();
+        }
+        return instance;
+    }
+
+    private static void loadConfig() {
         Yaml yaml = new Yaml();
 
         //Loads an external config.yml if it exists
+        String jarDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
+                .getParent();
+        String externalConfigFilePath = jarDir + File.separator + "config.yml";
+
         File externalConfigFile = new File(externalConfigFilePath);
 
         if (externalConfigFile.exists()) {
             try (InputStream inputStream = new FileInputStream(externalConfigFile)) {
                 System.out.println("Loaded external config from " + externalConfigFilePath);
-                return yaml.loadAs(inputStream, Config.class);
-
+                instance = yaml.loadAs(inputStream, Config.class);
+                return;
             } catch (Exception e) {
                 System.out.println("Error loading external config: " + e.getMessage());
             }
@@ -63,14 +76,12 @@ public class Config {
         try (InputStream inputStream = Config.class.getClassLoader().getResourceAsStream("config.yml")) {
             if (inputStream != null) {
                 System.out.println("Loaded default config.");
-                return yaml.loadAs(inputStream, Config.class);
+                instance = yaml.loadAs(inputStream, Config.class);
             } else {
                 System.out.println("Internal config not found in JAR.");
             }
         } catch (Exception e) {
             System.out.println("Error loading internal config: " + e.getMessage());
         }
-
-        return null;
     }
 }

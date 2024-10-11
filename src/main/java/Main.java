@@ -5,22 +5,16 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static final String CURRENT_DATE = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-    public static Config config;
 
     public static void main(String[] args) {
-        String jarDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath())
-                .getParent();
-        String externalConfigFilePath = jarDir + File.separator + "config.yml";
-
-        config = Config.loadConfig(externalConfigFilePath);
+        Config config = Config.getInstance();
 
         if (config == null) {
-            System.out.println("Failed to load configuration.");
+            System.out.println("Failed to load configuration. Stopping application.");
             return;
         }
 
@@ -39,7 +33,7 @@ public class Main {
 
         File desktopFolder = new File(desktopPath);
 
-        File[] files = Utils.getNonBlacklistedFiles(desktopFolder, config);
+        File[] files = Utils.getNonBlacklistedFiles(desktopFolder);
 
         //Stops the program if there are no eligible files
         if (files == null || files.length == 0) {
