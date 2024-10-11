@@ -44,13 +44,17 @@ After building the JAR, you need to create a `config.yml` file that defines the 
     destinationPath:
 
     #Add the full names of the files you don't want the app to touch.
-    blacklist:
+    blacklistedFiles:
       - desktop.ini #Do not delete
+	  
+    #Example: .exe
+    blacklistedExtensions:
     ```
 
     - **desktopPath**: The path to your desktop folder.
     - **destinationPath**: The folder where files should be moved.
-    - **blacklist**: A list of filenames that the application should ignore.
+    - **blacklistedFiles**: A list of filenames that the application should ignore.
+    - **blacklistedExtensions**: A list of file extensions that the application should ignore.
 
 2. Place this `config.yml` file in the same directory as the JAR.
 
