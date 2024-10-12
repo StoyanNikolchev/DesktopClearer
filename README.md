@@ -28,55 +28,14 @@ DesktopClearer is a customizable Java application that sorts files from your des
     - Go to `Build > Build Artifacts > Build`.
     - The JAR file will be generated in the specified output directory as `DesktopClearer.jar`.
 
-## Setting Up the Configuration
-
-After building the JAR, you need to create a `config.yml` file that defines the desktop path, destination path, and blacklist.
-
-1. Create a `config.yml` file in the same directory as your JAR file with the following structure:
-
-    ```yaml
-    #Example: "C:\\Users\\YourUsername\\Desktop"
-    #Defaults to the Windows desktop directory if left blank
-    desktopPath:
-
-    #The application will create a subfolder named after the current date
-    #Defaults to the set desktop directory if left blank
-    destinationPath:
-
-    #Add the full names of the files you don't want the app to touch.
-    blacklistedFiles:
-      - desktop.ini #Do not delete
-	  
-    #Example: exe
-    blacklistedExtensions:
-    ```
-
-    - **desktopPath**: The path to your desktop folder.
-    - **destinationPath**: The folder where files should be moved.
-    - **blacklistedFiles**: A list of filenames that the application should ignore.
-    - **blacklistedExtensions**: A list of file extensions that the application should ignore.
-
-2. Place this `config.yml` file in the same directory as the JAR.
-
 ## Running the Application
 
-To run the application and see console output, create a `.bat` file to launch the JAR. Here's how:
+1. Run the JAR file. It will generate a `config.yml` and a `run.bat` and then shutdown.
 
-1. In the same folder as the JAR, create a new file with the `.bat` extension.
+2. Edit the `config.yml` per your preferences.
 
-2. Add the following content to the `.bat` file:
-
-    ```batch
-    @echo off
-    java -jar DesktopClearer.jar
-    pause
-    ```
-
-3. Save the `.bat` file.
-
-4. Double-click the `.bat` file to run the application.
+3. Double-click the `run.bat` file to run the application.
 
 ## Notes
 
-- If the application doesn't find a `config.yml` file in the directory, it will use the default configuration packaged within the JAR.
 - When a file with the same name is found in the target destination, the application will ask you for confirmation on whether to override.
