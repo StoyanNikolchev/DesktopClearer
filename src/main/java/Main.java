@@ -11,6 +11,13 @@ public class Main {
     public static final String CURRENT_DATE = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
     public static void main(String[] args) {
+
+        //First run generates the config.yml and run.bat files and closes the application
+        if (Utils.generateFiles()) {
+            System.out.println("Generated config.yml and run.bat");
+            return;
+        }
+
         Config config = Config.getInstance();
 
         if (config == null) {
